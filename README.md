@@ -3,7 +3,24 @@
 
 # Screenly OSE - Digital Signage for the Raspberry Pi
 
-To learn more about Screenly, please visit the official website at [ScreenlyApp.com](http://www.screenlyapp.com). On the official site, you'll find the complete installation instructions, along with a live-demo of Screenly.
+The tl;dr for installing Screenly OSE on [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) Jessie is:
+
+```
+$ bash <(curl -sL https://www.screenlyapp.com/install-ose.sh)
+```
+
+(The installation will take 15-20 minutes or so depending on your connectivity and the speed of your SD card.)
+
+To learn more about Screenly, please visit the official website at [ScreenlyApp.com](http://www.screenlyapp.com). On the official site, you'll find the complete installation instructions and disk images.
+
+Quick links:
+
+ * [FAQ](https://www.screenlyapp.com/faq/ose/)
+ * [Screenly OSE Home](https://www.screenlyapp.com/ose/)
+ * [Live Demo](http://ose.demo.screenlyapp.com/)
+ * [QA Checklist](https://www.forgett.com/checklist/1789089623)
+
+Screenly OSE works on all Raspberry Pi versions, including Raspberry Pi Zero and Raspberry Pi 3 Model B.
 
 ## Dockerized Development Environment
 
@@ -18,46 +35,6 @@ $ docker run --rm -ti \
   wireload/screenly-ose-server
 ```
 
-## Disk Image Changelog
-
-### 2015-02-25
-
- * Adds support for Raspberry Pi B+ V2.
- * Upgrades kernel and kernel modules.
- * Brings system packages up to date.
- * Various bug fixes.
-
-### 2014-11-03
-
- * Adds a setting for time display in 24 or 12 hour formats.
- * System updates (including Bash and OpenSSL).
- * Solves a UTF8 bug ([#226](https://github.com/wireload/screenly-ose/issues/226)).
- * Various bug fixes.
-
-### 2014-08-13
-
- * Adds support for Raspberry Pi Model B+.
- * Improves handling in `viewer.py` where the splash page is being displayed before `server.py` has been fully loaded.
- * Pulls in APT updates from Screenly's APT repository.
- * Other bug fixes up to commit 1946e252471fcf34c27903970fbde601189d65a5.
-
-### 2014-07-17
-
- * Fixes issue with load screen failing to connect.
- * Adds support for video feeds ([#210](https://github.com/wireload/screenly-ose/issues/210)).
- * Resolves issue with assets not being added ([#209](https://github.com/wireload/screenly-ose/issues/209)).
- * Resolves issue with assets not moving to active properly ([#201](https://github.com/wireload/screenly-ose/issues/201)).
- * Pulls in APT updates from Screenly's APT repository.
-
-### 2014-01-11
-
- * Upgrade kernel (3.10.25+) and firmware. Tracked in [this](https://github.com/wireload/rpi-firmware) fork.
- * Change and use Screenly's APT repository (apt.screenlyapp.com).
- * `apt-get upgrade` to the Screenly APT repository.
- * Update Screenly to latest version.
- * The disk image is available at [ScreenlyApp.com](http://www.screenlyapp.com).
-
 ## Running the Unit Tests
 
     nosetests --with-doctest
-

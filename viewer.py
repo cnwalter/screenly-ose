@@ -14,13 +14,13 @@ import sh
 
 from settings import settings
 import html_templates
-from utils import url_fails
-import db
-import assets_helper
+from lib.utils import url_fails
+from lib import db
+from lib import assets_helper
 
 
 __author__ = "WireLoad Inc"
-__copyright__ = "Copyright 2012-2015, WireLoad Inc"
+__copyright__ = "Copyright 2012-2016, WireLoad Inc"
 __license__ = "Dual License: GPLv2 and Commercial License"
 
 
@@ -31,7 +31,7 @@ BLACK_PAGE = '/tmp/screenly_html/black_page.html'
 WATCHDOG_PATH = '/tmp/screenly.watchdog'
 SCREENLY_HTML = '/tmp/screenly_html/'
 LOAD_SCREEN = '/screenly/loading.jpg'  # relative to $HOME
-UZBLRC = '/screenly/misc/uzbl.rc'  # relative to $HOME
+UZBLRC = '/.config/uzbl/config-screenly'  # relative to $HOME
 INTRO = '/screenly/intro-template.html'
 
 current_browser_url = None
@@ -181,12 +181,7 @@ def browser_url(url, cb=lambda _: True, force=False):
     global current_browser_url
 
     if url == current_browser_url and not force:
-        logging.debug('Already showing %s.', current_browser_url)
-
-        # For some reason this invokes a weird black screen issue
-        # when going image -> image.
-        # logging.debug('Already showing %s, reloading it.', current_browser_url)
-        # browser_send('reload full')
+        logging.debug('Already showing %s, reloading it.', current_browser_url)
     else:
         current_browser_url = url
         browser_send('uri ' + current_browser_url, cb=cb)
@@ -224,7 +219,7 @@ def view_video(uri, duration):
 
 def check_update():
     """
-    Check if there is a later version of Screenly-OSE
+    Check if there is a later version of Screenly OSE
     available. Only do this update once per day.
     Return True if up to date was written to disk,
     False if no update needed and None if unable to check.
@@ -240,10 +235,11 @@ def check_update():
 
     logging.debug('Last update: %s' % str(last_update))
 
+    git_branch = sh.git('rev-parse', '--abbrev-ref', 'HEAD')
     if last_update is None or last_update < (datetime.now() - timedelta(days=1)):
 
         if not url_fails('http://stats.screenlyapp.com'):
-            latest_sha = req_get('http://stats.screenlyapp.com/latest')
+            latest_sha = req_get('http://stats.screenlyapp.com/latest/{}'.format(git_branch))
 
             if latest_sha.status_code == 200:
                 with open(sha_file, 'w') as f:
@@ -253,7 +249,7 @@ def check_update():
                 logging.debug('Received non 200-status')
                 return
         else:
-            logging.debug('Unable to retreive latest SHA')
+            logging.debug('Unable to retrieve latest SHA')
             return
     else:
         return False
